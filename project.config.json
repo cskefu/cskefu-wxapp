@@ -41,7 +41,7 @@
     "compileType": "miniprogram",
     "libVersion": "2.4.2",
     "appid": "wx4ef49ff85a8c3b73",
-    "projectname": "ColorUI-template",
+    "projectname": "春松客服小程序端",
     "debugOptions": {
         "hidedInDevtools": []
     },
