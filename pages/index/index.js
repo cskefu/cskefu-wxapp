@@ -10,15 +10,10 @@ var service_end = true;
 
 var hostname = "192.168.1.5:8036";
 var protocol = "http";
-// var username = "wxapp";
 
-//var userid = "86976df0c1fc3f76f343b065d137c5a5";
-// var appid = "0npljl";
-//var sessionid = "";
-// var osname = "wxapp";
-// var orgi = "cskefu";
 Page({
     data: {
+        content: "", //输入框值
         InputBottom: 0,
         config: {},
 
@@ -38,40 +33,52 @@ Page({
             InputBottom: 0
         })
     },
+    inputing() {
+        if (!socket) return;
+        if (!this.data.content) return;
+        socket.emit('message', {
+            appid: this.data.config.appid,
+            userid: this.data.config.userid,
+            type: "writing",
+            session: this.data.config.sessionid,
+            orgi: this.data.config.orgi,
+            message: this.data.content,
+        });
+        setTimeout(() => {
+            socket.emit('message', {
+                appid: this.data.config.appid,
+                userid: this.data.config.userid,
+                type: "writing",
+                session: this.data.config.sessionid,
+                orgi: this.data.config.orgi,
+                message: "",
+            });
+        }, 2000);
+    },
     sendMsg() {
         if (!socket) return;
-        let message = "测试文本";
+        if (!this.data.content) return;
         socket.emit('message', {
             appid: this.data.config.appid,
             userid: this.data.config.userid,
             type: "message",
             session: this.data.config.sessionid,
             orgi: this.data.config.orgi,
-            message: message
+            message: this.data.content,
         });
-    },
-
-    request: (options) => {
-        return new Promise((resolve, reject) => {
-            options.success = (e) => {
-                resolve(e);
-            }
-            options.fail = (e) => {
-                reject(e);
-            }
-            wx.request(options);
+        this.setData({
+            content: ""
         })
-
     },
-
     async connect() {
         let _this = this;
 
         let response = await this.request({
-            url: "http://localhost:8035/im/text/0npljl",
+            url: "http://192.168.1.5:8035/im/text/0npljl",
             method: "POST"
         })
-        console.log(response.data);
+        //console.log(response.data);
+        response.data.userid = "shih";
         let {
             userid,
             orgi,
@@ -95,28 +102,22 @@ Page({
         // });
 
         socket.on('connect', function () {
-            console.log("on connect ...");
+            //console.log("on connect ...");
             if ('#{contacts.name}') {
                 socket.emit('new', {
                     name: "测试微信小程序",
                     phone: "15238194793",
                     email: "123@qq.com",
-                    memo: "#{contacts.memo}",
-                    orgi: "#{inviteData.orgi}",
-                    appid: "#{appid}"
+                    memo: "来访原因",
+                    orgi: _this.data.config.inviteData.orgi,
+                    appid: _this.data.config.appid
                 });
             }
         })
         socket.on("agentstatus", function (data) {
             console.log("agentstatus", data);
-            ///document.getElementById('connect-message').innerHTML = data.message;
         })
         socket.on("status", function (data) {
-            // if (false)
-            //     output('<span id="connect-message">' + data.message + '</span>', 'message connect-message', false);
-            // else
-            //     output('<span id="connect-message">' + data.message + '</span>', 'message connect-message', true);
-
             console.log("[status]", data);
 
             if (data.messageType == "end") {
@@ -142,12 +143,25 @@ Page({
         })
         socket.on('message', function (data) {
             data.createtime = dayjs(data.createtime).format('YYYY-MM-DD HH:mm:ss');
-            console.log("on message", data);
+            //console.log("on message", data);
             _this.setData({
                 messageList: [..._this.data.messageList, ...[data]],
             })
             if (data.msgtype == "image") {} else if (data.msgtype == "file") {}
-            if (data.calltype == "呼入") {} else if (data.calltype == "呼出") {}
+            if (data.calltype == "呼入") {} else if (data.calltype == "呼出") {
+                let context = wx.createInnerAudioContext();
+                context.autoplay = true;
+                context.src = "/utils/14039.mp3";
+                context.onPlay(() => {
+                    //console.log("play");
+                });
+                context.onError((res) => { //打印错误
+                    console.log(res.errMsg); //错误信息
+                    console.log(res.errCode); //错误码
+                })
+                context.play();
+            }
+            _this.pageScrollToBottom();
         });
 
         socket.on('disconnect', function () {
@@ -157,5 +171,31 @@ Page({
         socket.on('satisfaction', function () {
             console.log("[satisfaction]");
         });
+    },
+
+    request: (options) => {
+        return new Promise((resolve, reject) => {
+            options.success = (e) => {
+                resolve(e);
+            }
+            options.fail = (e) => {
+                reject(e);
+            }
+            wx.request(options);
+        })
+
+    },
+
+    // 获取容器高度，使页面滚动到容器底部
+    pageScrollToBottom: function () {
+        wx.createSelectorQuery().select('#page').boundingClientRect(function (rect) {
+            if (rect) {
+                // 使页面滚动到底部
+                console.log(rect.height);
+                wx.pageScrollTo({
+                    scrollTop: rect.height
+                })
+            }
+        }).exec()
     },
 })

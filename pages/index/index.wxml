@@ -2,7 +2,7 @@
     <view slot="backText">返回</view>
     <view slot="content">聊天</view>
 </cu-custom> -->
-<view class="cu-chat">
+<view class="cu-chat" id="page">
     <view class="cu-info round" wx:if="{{notice!=''}}">{{notice.message}}</view>
     <block wx:for="{{messageList}}" wx:key="index">
 
@@ -138,8 +138,8 @@
     <view class="action">
         <text class="cuIcon-sound text-grey"></text>
     </view>
-    <input class="solid-bottom" bindfocus="InputFocus" bindblur="InputBlur" adjust-position="{{false}}"
-        focus="{{false}}" maxlength="300" cursor-spacing="10"></input>
+    <input class="solid-bottom" bindfocus="InputFocus" bindblur="InputBlur" bindinput="inputing"
+        adjust-position="{{false}}" focus="{{false}}" maxlength="300" model:value="{{content}}"></input>
     <view class="action">
         <text class="cuIcon-emojifill text-grey"></text>
     </view>
