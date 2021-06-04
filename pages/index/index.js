@@ -1,5 +1,4 @@
 const app = getApp()
-// const io = require('weapp.socket.io');
 const dayjs = require('../../utils/dayjs.min.js')
 const io = require('../../utils/weapp.socket.io.js')
 
@@ -8,8 +7,12 @@ var socket = null;
 //=====================================
 var service_end = true;
 
-var hostname = "192.168.1.5:8036";
-var protocol = "http";
+const hostname = "192.168.1.4";
+const http_protocol = "http";
+const http_port = "8035";
+const socket_protocol = "ws";
+const socket_port = "8036";
+const service_appid = "104eac"; //渠道ID，添加渠道后获得
 
 Page({
     data: {
@@ -19,6 +22,9 @@ Page({
 
         messageList: [],
         notice: "",
+
+        myAvatar: "http://api.btstu.cn/sjtx/api.php?lx=c1&format=images&method=mobile",
+        servicerAvatar: "https://api.uomg.com/api/rand.avatar?sort=%E5%A5%B3&format=images",
     },
     onLoad() {
         this.connect();
@@ -35,7 +41,6 @@ Page({
     },
     inputing() {
         if (!socket) return;
-        if (!this.data.content) return;
         socket.emit('message', {
             appid: this.data.config.appid,
             userid: this.data.config.userid,
@@ -44,19 +49,17 @@ Page({
             orgi: this.data.config.orgi,
             message: this.data.content,
         });
-        setTimeout(() => {
-            socket.emit('message', {
-                appid: this.data.config.appid,
-                userid: this.data.config.userid,
-                type: "writing",
-                session: this.data.config.sessionid,
-                orgi: this.data.config.orgi,
-                message: "",
-            });
-        }, 2000);
     },
     sendMsg() {
         if (!socket) return;
+        socket.emit('message', {
+            appid: this.data.config.appid,
+            userid: this.data.config.userid,
+            type: "writing",
+            session: this.data.config.sessionid,
+            orgi: this.data.config.orgi,
+            message: "",
+        });
         if (!this.data.content) return;
         socket.emit('message', {
             appid: this.data.config.appid,
@@ -74,13 +77,20 @@ Page({
         let _this = this;
 
         let response = await this.request({
-            url: "http://192.168.1.5:8035/im/text/0npljl",
-            method: "POST"
+            url: `${http_protocol}://${hostname}:${http_port}/im/text/${service_appid}`,
+            method: "POST",
+            header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+                userid: "123465",
+                name: "SHIH",
+            },
         })
         //console.log(response.data);
-        response.data.userid = "shih";
         let {
             userid,
+            name,
             orgi,
             sessionid,
             appid,
@@ -89,10 +99,8 @@ Page({
             config: response.data,
         })
 
-        // const socket = io(`wss://socketio-chat-h9jt.herokuapp.com/`)
-
         socket = io(
-            `${protocol}://${hostname}/im/user?userid=${userid}&orgi=${orgi}&session=${sessionid}&appid=${appid}`, {
+            `${socket_protocol}://${hostname}:${socket_port}/im/user?userid=${userid}&name=${name}&orgi=${orgi}&session=${sessionid}&appid=${appid}`, {
                 transports: ['websocket']
             }
         );
@@ -103,22 +111,21 @@ Page({
 
         socket.on('connect', function () {
             //console.log("on connect ...");
-            if ('#{contacts.name}') {
-                socket.emit('new', {
-                    name: "测试微信小程序",
-                    phone: "15238194793",
-                    email: "123@qq.com",
-                    memo: "来访原因",
-                    orgi: _this.data.config.inviteData.orgi,
-                    appid: _this.data.config.appid
-                });
-            }
+            //提交详细资料
+            // socket.emit('new', {
+            //     name: "张三",
+            //     phone: "15200004793",
+            //     email: "123@qq.com",
+            //     memo: "测试微信小程序连接春松客服",
+            //     orgi: `${orgi}`,
+            //     appid: `${appid}`
+            // });
         })
         socket.on("agentstatus", function (data) {
-            console.log("agentstatus", data);
+            //console.log("agentstatus", data);
         })
         socket.on("status", function (data) {
-            console.log("[status]", data);
+            //console.log("[status]", data);
 
             if (data.messageType == "end") {
                 service_end = true;
@@ -128,7 +135,7 @@ Page({
 
             } else if (data.messageType == "text") {
                 service_end = false;
-                console.log(data.message);
+                //console.log(data.message);
                 _this.setData({
                     notice: data
                 })
@@ -142,13 +149,15 @@ Page({
             }
         })
         socket.on('message', function (data) {
-            data.createtime = dayjs(data.createtime).format('YYYY-MM-DD HH:mm:ss');
+            data.createtime = dayjs(data.createtime).format('MM-DD HH:mm:ss');
             //console.log("on message", data);
             _this.setData({
                 messageList: [..._this.data.messageList, ...[data]],
             })
             if (data.msgtype == "image") {} else if (data.msgtype == "file") {}
-            if (data.calltype == "呼入") {} else if (data.calltype == "呼出") {
+            if (data.calltype == "呼入") {
+
+            } else if (data.calltype == "呼出") {
                 let context = wx.createInnerAudioContext();
                 context.autoplay = true;
                 context.src = "/utils/14039.mp3";

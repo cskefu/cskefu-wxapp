@@ -1,7 +1,12 @@
 page {
-  padding-bottom: 100rpx;
+    padding-bottom: 100rpx;
 }
 
 .cu-chat .cu-item {
-	padding: 10rpx 10rpx 70rpx;
+    padding: 10rpx 10rpx 60rpx;
+}
+
+.cu-chat .cu-item .date {
+    width: 490rpx;
+    left: 130rpx;
 }
