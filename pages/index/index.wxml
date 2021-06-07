@@ -3,7 +3,9 @@
     <view slot="content">聊天</view>
 </cu-custom> -->
 <view class="cu-chat" id="page">
-    <view class="cu-info round" wx:if="{{notice!=''}}">{{notice.message}}</view>
+    <view class="cu-info round" wx:if="{{notice!=''}}">
+        <rich-text nodes="{{notice.message}}"></rich-text>
+    </view>
     <block wx:for="{{messageList}}" wx:key="index">
 
         <!-- 文字 -->
@@ -14,7 +16,7 @@
             </view>
             <view class="main">
                 <view class="content shadow">
-                    <text>{{item.message}}</text>
+                    <rich-text nodes="{{item.message}}"></rich-text>
                 </view>
             </view>
             <view class="cu-avatar radius" style="background-image:url({{myAvatar}});" wx:if="{{item.calltype=='呼入'}}">
@@ -29,8 +31,10 @@
                 wx:if="{{item.calltype=='呼出'}}">
             </view>
             <view class="main">
-                <image src="{{config.schema}}://{{config.hostname}}:{{config.port}}{{item.message}}" class="radius"
-                    mode="widthFix"></image>
+                <image src="{{config.schema}}://{{config.hostname}}:{{config.port}}{{item.message}}" mode="widthFix"
+                    bindtap="previewImage"
+                    data-src="{{config.schema}}://{{config.hostname}}:{{config.port}}{{item.message}}" class="radius">
+                </image>
             </view>
             <view class="cu-avatar radius" style="background-image:url({{myAvatar}});" wx:if="{{item.calltype=='呼入'}}">
             </view>

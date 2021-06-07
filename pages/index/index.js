@@ -227,4 +227,17 @@ Page({
             }
         }).exec()
     },
+
+    previewImage({
+        currentTarget: {
+            dataset: {
+                src
+            }
+        }
+    }) {
+        wx.previewImage({
+            current: src,
+            urls: [src],
+        })
+    },
 })
