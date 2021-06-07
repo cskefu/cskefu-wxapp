@@ -1,8 +1,8 @@
 # 春松客服小程序版
 原生微信小程序客服对接页面
 
-<img src="static\images\Snipaste_2021-06-07_23-45-47.png" alt="原生page版" height="400px">
-<img src="static\images\Snipaste_2021-06-07_23-59-20.png" alt="webview版" height="400px">
+<img src="https://gitee.com/shih945/cskefu-wxapp/raw/master/static/images/Snipaste_2021-06-07_23-45-47.png" alt="原生page版" height="400px">
+<img src="https://gitee.com/shih945/cskefu-wxapp/raw/master/static/images/Snipaste_2021-06-07_23-59-20.png" alt="webview版" height="400px">
 
 ## 用法
 1. 实现接口
