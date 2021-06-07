@@ -5,6 +5,9 @@
 1. 实现接口
     - 找到后台项目中接口IMController接口`/text/{appid}`，位于`contact-center/app/src/main/java/com/chatopera/cc/controller/apps/IMController.java` 983行左右，将`RequestMapping`改为`GetMapping`;
     - 复制此接口放其后，将`GetMapping`改为`PostMapping`，在其上添加`@ResponseBody`注解,将`ModelAndView`替换为`Map<String,Object>`,修改接口第一行内容为`Map<String,Object> params = new HashMap<>();`  ,将`view.addObject`全部替换为`params.put`,最后一行改为`return params;` 即将原来传入模板引擎的参数全部放入map返回给前端如下所示
+        <details>
+        <summary>查看示例接口代码</summary>
+
         ```java
         @ResponseBody
         @PostMapping("/text/{appid}")
@@ -101,7 +104,7 @@
             return params;
         }
         ```
-
+        </details>
 2. 升级`netty-socketio`版本,因低版本会导致`weapp.socket.io`无法连接
     ```xml
     <dependency>

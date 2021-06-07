@@ -12,7 +12,7 @@ const http_protocol = "http";
 const http_port = "8035";
 const socket_protocol = "ws";
 const socket_port = "8036";
-const service_appid = "104eac"; //渠道ID，添加渠道后获得
+const service_appid = "09xqjd"; //渠道ID，添加渠道后获得
 
 Page({
     data: {
@@ -100,7 +100,7 @@ Page({
         })
 
         socket = io(
-            `${socket_protocol}://${hostname}:${socket_port}/im/user?userid=${userid}&name=${name}&orgi=${orgi}&session=${sessionid}&appid=${appid}`, {
+            `${socket_protocol}://${hostname}:${socket_port}/im/user?userid=${userid}&name=${name}&nickname=${name}&orgi=${orgi}&session=${sessionid}&appid=${appid}`, {
                 transports: ['websocket']
             }
         );
