@@ -50,6 +50,26 @@ Page({
             message: this.data.content,
         });
     },
+    /**
+     * 选择图片并上传发送
+     */
+    chooseImage() {
+        let _this = this;
+        wx.chooseImage({
+            count: 1,
+            sizeType: ['compressed'],
+            success: (res) => {
+                const tempFilePath = res.tempFilePaths[0];
+                wx.uploadFile({
+                    url: `${http_protocol}://${hostname}:${http_port}/im/image/upload.html?userid=${_this.data.config.userid}&appid=${_this.data.config.appid}&username=${_this.data.config.name}&orgi=${_this.data.config.orgi}`,
+                    name: 'imgFile',
+                    filePath: tempFilePath,
+                })
+            },
+            fail: (res) => {},
+            complete: (res) => {},
+        })
+    },
     sendMsg() {
         if (!socket) return;
         socket.emit('message', {

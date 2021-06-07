@@ -8,30 +8,31 @@
 
         <!-- 文字 -->
         <view class="cu-item {{item.calltype=='呼入'?'self':''}}" wx:if="{{item.msgtype=='text'}}">
-            <view class="cu-avatar radius" style="background-image:url({{config.inviteData.consult_dialog_headimg?(config.schema+'://'+config.hostname+':'+config.port+'/res/image.html?id='+config.inviteData.consult_dialog_headimg):servicerAvatar}});" wx:if="{{item.calltype=='呼出'}}">
+            <view class="cu-avatar radius"
+                style="background-image:url({{config.inviteData.consult_dialog_headimg?(config.schema+'://'+config.hostname+':'+config.port+'/res/image.html?id='+config.inviteData.consult_dialog_headimg):servicerAvatar}});"
+                wx:if="{{item.calltype=='呼出'}}">
             </view>
             <view class="main">
                 <view class="content shadow">
                     <text>{{item.message}}</text>
                 </view>
             </view>
-            <view class="cu-avatar radius"
-                style="background-image:url({{myAvatar}});"
-                wx:if="{{item.calltype=='呼入'}}"></view>
+            <view class="cu-avatar radius" style="background-image:url({{myAvatar}});" wx:if="{{item.calltype=='呼入'}}">
+            </view>
             <view class="date "> {{item.createtime}}</view>
         </view>
         <!-- 图片 -->
         <view class="cu-item {{item.calltype=='呼入'?'self':''}}" wx:if="{{item.msgtype=='image'}}">
 
-            <view class="cu-avatar radius" style="background-image:url({{config.inviteData.consult_dialog_headimg?(config.schema+'://'+config.hostname+':'+config.port+'/res/image.html?id='+config.inviteData.consult_dialog_headimg):servicerAvatar}}});" wx:if="{{item.calltype=='呼出'}}">
+            <view class="cu-avatar radius"
+                style="background-image:url({{config.inviteData.consult_dialog_headimg?(config.schema+'://'+config.hostname+':'+config.port+'/res/image.html?id='+config.inviteData.consult_dialog_headimg):servicerAvatar}}});"
+                wx:if="{{item.calltype=='呼出'}}">
             </view>
             <view class="main">
                 <image src="{{config.schema}}://{{config.hostname}}:{{config.port}}{{item.message}}" class="radius"
                     mode="widthFix"></image>
             </view>
-            <view class="cu-avatar radius"
-                style="background-image:url({{myAvatar}});"
-                wx:if="{{item.calltype=='呼入'}}">
+            <view class="cu-avatar radius" style="background-image:url({{myAvatar}});" wx:if="{{item.calltype=='呼入'}}">
             </view>
             <view class="date"> {{item.createtime}}</view>
         </view>
@@ -132,8 +133,8 @@
 </view>
 
 <view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
-    <view class="action">
-        <text class="cuIcon-sound text-grey"></text>
+    <view class="action" bindtap="chooseImage">
+        <text class="cuIcon-pic text-grey"></text>
     </view>
     <input class="solid-bottom" bindfocus="InputFocus" bindblur="InputBlur" bindinput="inputing"
         adjust-position="{{false}}" focus="{{false}}" maxlength="300" model:value="{{content}}"></input>
