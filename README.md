@@ -1,6 +1,9 @@
 # 春松客服小程序版
 原生微信小程序客服对接页面
 
+<img src="static\images\Snipaste_2021-06-07_23-45-47.png" alt="原生page版" height="400px">
+<img src="static\images\Snipaste_2021-06-07_23-59-20.png" alt="webview版" height="400px">
+
 ## 用法
 1. 实现接口
     - 找到后台项目中接口IMController接口`/text/{appid}`，位于`contact-center/app/src/main/java/com/chatopera/cc/controller/apps/IMController.java` 983行左右，将`RequestMapping`改为`GetMapping`;
