@@ -25,6 +25,8 @@ Page({
 
         myAvatar: "http://api.btstu.cn/sjtx/api.php?lx=c1&format=images&method=mobile",
         servicerAvatar: "https://api.uomg.com/api/rand.avatar?sort=%E5%A5%B3&format=images",
+
+        openStickerPanel: false,
     },
     onLoad() {
         this.connect();
@@ -228,6 +230,9 @@ Page({
         }).exec()
     },
 
+    /**
+     * 图片预览
+     */
     previewImage({
         currentTarget: {
             dataset: {
@@ -238,6 +243,14 @@ Page({
         wx.previewImage({
             current: src,
             urls: [src],
+        })
+    },
+    /**
+     * 表情面板开关
+     */
+    switchStickerPanel() {
+        this.setData({
+            openStickerPanel: !this.data.openStickerPanel,
         })
     },
 })

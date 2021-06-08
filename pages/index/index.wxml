@@ -136,14 +136,22 @@
     </view> -->
 </view>
 
-<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom}}px">
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom + openStickerPanel?150:0}}px">
     <view class="action" bindtap="chooseImage">
         <text class="cuIcon-pic text-grey"></text>
     </view>
     <input class="solid-bottom" bindfocus="InputFocus" bindblur="InputBlur" bindinput="inputing"
         adjust-position="{{false}}" focus="{{false}}" maxlength="300" model:value="{{content}}"></input>
-    <view class="action">
+    <view class="action" bindtap="switchStickerPanel">
         <text class="cuIcon-emojifill text-grey"></text>
     </view>
     <button class="cu-btn bg-green shadow" bindtap="sendMsg">发送</button>
+</view>
+
+<view class="sticker-panel" wx:if="{{openStickerPanel}}">
+    <block wx:for="{{79}}">
+        <image class="sticker"
+            src="{{config.schema}}://{{config.hostname}}:{{config.port}}/js/kindeditor/plugins/emoticons/images/{{index}}.gif"
+            wx:key="index"></image>
+    </block>
 </view>
