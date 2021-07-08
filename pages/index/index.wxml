@@ -149,9 +149,7 @@
 </view>
 
 <view class="sticker-panel" wx:if="{{openStickerPanel}}">
-    <block wx:for="{{79}}">
-        <image class="sticker"
-            src="{{config.schema}}://{{config.hostname}}:{{config.port}}/js/kindeditor/plugins/emoticons/images/{{index}}.gif"
-            wx:key="index"></image>
-    </block>
+    <image class="sticker" wx:for="{{79}}" wx:key="index" bindtap="chooseSticker" data-idx="{{index}}"
+        src="{{config.schema}}://{{config.hostname}}:{{config.port}}/js/kindeditor/plugins/emoticons/images/{{index}}.gif">
+    </image>
 </view>
