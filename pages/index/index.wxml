@@ -136,7 +136,7 @@
     </view> -->
 </view>
 
-<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom + openStickerPanel?150:0}}px">
+<view class="cu-bar foot input {{InputBottom!=0?'cur':''}}" style="bottom:{{InputBottom + (openStickerPanel?150:0)}}px">
     <view class="action" bindtap="chooseImage">
         <text class="cuIcon-pic text-grey"></text>
     </view>
