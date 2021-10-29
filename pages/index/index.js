@@ -92,7 +92,8 @@ Page({
             message: this.data.content,
         });
         this.setData({
-            content: ""
+            content: "",
+            openStickerPanel: false,
         })
     },
     async connect() {
@@ -171,8 +172,14 @@ Page({
             }
         })
         socket.on('message', function (data) {
-            data.createtime = dayjs(data.createtime).format('MM-DD HH:mm:ss');
             //console.log("on message", data);
+            //处理时间
+            data.createtime = dayjs(data.createtime).format('MM-DD HH:mm:ss');
+            //处理表情
+            data.message = data.message.replaceAll(
+                "src='/im/js/kindeditor/plugins/emoticons/images/",
+                `src='${http_protocol}://${hostname}:${http_port}/im/js/kindeditor/plugins/emoticons/images/`
+            );
             _this.setData({
                 messageList: [..._this.data.messageList, ...[data]],
             })
@@ -195,8 +202,8 @@ Page({
             _this.pageScrollToBottom();
         });
 
-        socket.on('disconnect', function () {
-            console.log("editor.readonly();", '连接失败');
+        socket.on('disconnect', function (error) {
+            console.log('连接失败', error);
         });
 
         socket.on('satisfaction', function () {
@@ -233,13 +240,8 @@ Page({
     /**
      * 图片预览
      */
-    previewImage({
-        currentTarget: {
-            dataset: {
-                src
-            }
-        }
-    }) {
+    previewImage(e) {
+        let src = e.currentTarget.dataset.src;
         wx.previewImage({
             current: src,
             urls: [src],
@@ -251,6 +253,12 @@ Page({
     switchStickerPanel() {
         this.setData({
             openStickerPanel: !this.data.openStickerPanel,
+        })
+    },
+    chooseSticker(e) {
+        let idx = e.currentTarget.dataset.idx;
+        this.setData({
+            content: this.data.content + `[${idx}]`,
         })
     },
 })
