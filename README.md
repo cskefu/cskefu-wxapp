@@ -7,8 +7,15 @@
 
 ## 用法
 
-1. 配置index页面js文件中参数
-配置部署项目的协议、域名、端口等。
+1. 配置后台https和wss，小程序上线必须支持
+
+    参考[春松客服配置 CDN和HTTPS | 春松客服](https://chatopera.blog.csdn.net/article/details/105820829)
+
+2. 配置index页面js文件中参数
+    
+    后台添加渠道，取得渠道ID；
+
+    在`pages/index/index.js`配置部署项目的协议、域名、端口和渠道ID。
 
 
 ## 作者
